@@ -24,15 +24,15 @@ sudo apt update
 # Verificar si se ha proporcionado un argumento (nombre del paquete)
 if [ -z "$1" ]; then
     # Si no se proporciona, solicitar al usuario que ingrese el nombre del paquete
-    read -p "Por favor, ingrese el nombre del paquete: " package_name
+    read -p "Por favor, ingrese el nombre del paquete: " nombre_paquete
 else
-    package_name=$1
+    nombre_paquete=$1
 fi
 
 # Verificar si el paquete está instalado en el sistema
-if dpkg -l | grep -q "^ii  $package_name "; then
+if dpkg -l | grep -q "^ii  $nombre_paquete "; then
     # El paquete está instalado
-    echo "El paquete '$package_name' está instalado."
+    echo "El paquete '$nombre_paquete' está instalado."
     echo "¿Qué acción desea realizar?"
     echo "1. Mostrar información del paquete"
     echo "2. Reinstalar el paquete"
@@ -42,19 +42,19 @@ if dpkg -l | grep -q "^ii  $package_name "; then
     read -p "Seleccione una opción (1-5): " option
     case $option in
         1)
-            apt-cache show $package_name
+            apt-cache show $nombre_paquete
             ;;
         2)
-            sudo apt reinstall $package_name
+            sudo apt reinstall $nombre_paquete
             ;;
         3)
-            sudo apt install --only-upgrade $package_name
+            sudo apt install --only-upgrade $nombre_paquete
             ;;
         4)
-            sudo apt remove $package_name
+            sudo apt remove $nombre_paquete
             ;;
         5)
-            sudo apt purge $package_name
+            sudo apt purge $nombre_paquete
             ;;
         *)
             echo "Opción no válida."
@@ -62,17 +62,17 @@ if dpkg -l | grep -q "^ii  $package_name "; then
     esac
 else
     # El paquete no está instalado, verificar si existe en los repositorios del sistema
-    if apt-cache show $package_name &> /dev/null; then
+    if apt-cache show $nombre_paquete &> /dev/null; then
         # El paquete existe en los repositorios del sistema
-        echo "El paquete '$package_name' existe en los repositorios del sistema."
-        read -p "¿Desea instalar el paquete '$package_name'? (s/n): " install_choice
+        echo "El paquete '$nombre_paquete' existe en los repositorios del sistema."
+        read -p "¿Desea instalar el paquete '$nombre_paquete'? (S/N): " install_choice
         if [ "$install_choice" == "s" ]; then
-            sudo apt install $package_name
+            sudo apt install $nombre_paquete
         fi
     else
         # El paquete no existe en los repositorios del sistema
-        echo "El paquete '$package_name' no existe en los repositorios del sistema."
+        echo "El paquete '$nombre_paquete' no existe en los repositorios del sistema."
         echo "Aquí está el resultado de la búsqueda:"
-        apt-cache search $package_name
+        apt-cache search $nombre_paquete
     fi
 fi
