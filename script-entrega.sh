@@ -1,3 +1,10 @@
+
+Leyendo lista de paquetes... Hecho
+E: No se pudo obtener un bloqueo /var/lib/apt/lists/lock. Lo mantiene el proceso 5367 (apt)
+N: Tenga en cuenta que eliminar el archivo de bloqueo no es una solución y puede dañar su sistema.
+E: No se pudo bloquear el directorio /var/lib/apt/lists/
+N: No se ha podido localizar el paquete
+
 ###########################################
 #
 # Autor: Kai Rodríguez García
