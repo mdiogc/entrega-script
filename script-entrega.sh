@@ -1,3 +1,11 @@
+Obj:1 http://archive.ubuntu.com/ubuntu focal InRelease
+Obj:2 http://es.archive.ubuntu.com/ubuntu jammy InRelease                                                                          
+Obj:3 http://es.archive.ubuntu.com/ubuntu jammy-updates InRelease                                                                  
+Obj:4 http://repository.spotify.com stable InRelease                                                                               
+Obj:5 http://packages.microsoft.com/repos/code stable InRelease                                                                    
+Obj:6 http://es.archive.ubuntu.com/ubuntu jammy-backports InRelease             
+Obj:7 http://security.ubuntu.com/ubuntu jammy-security InRelease
+
 
 Leyendo lista de paquetes... Hecho
 E: No se pudo obtener un bloqueo /var/lib/apt/lists/lock. Lo mantiene el proceso 5367 (apt)
