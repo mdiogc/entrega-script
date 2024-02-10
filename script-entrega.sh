@@ -1,3 +1,60 @@
+paquete=$1
+
+while [ -z "$paquete" ]; do
+    echo "ERROR: No ha escrito un argumento. Debes escribir el nombre de un paquete de software."
+    read -p "Escribe el nombre del paquete: " paquete
+done
+
+sudo apt-get update > /dev/null 2>&1
+
+dpkg -s "$paquete" > /dev/null 2>&1
+
+if [ "$?" -eq 0 ]; then
+    echo "Tienes el paquete instalado. Elije una opción: "
+    echo "Menú"
+    echo "┌───────────────────────────────────────────────────────────┐"
+    echo ""
+    echo "1) Mostrar Versión"
+    echo "2) Reinstalar"
+    echo "3) Actualizarlo"
+    echo "4) Eliminarlo (guardando la configuración)"
+    echo "5) Eliminarlo totalmente"
+    echo ""
+    echo "└───────────────────────────────────────────────────────────┘"
+    read -p "Elija la opción que desee: " opcion
+
+    case "$opcion" in
+        1) dpkg -s "$paquete" ;;
+        2) sudo apt-get install --reinstall "$paquete" ;;
+        3) sudo apt-get install "$paquete" ;;
+        4) sudo apt-get remove "$paquete" ;;
+        5) sudo apt-get purge "$paquete" ;;
+        *) echo "Error: '$opcion' no es una opción correcta" ;;
+    esac
+elif [ "$?" -eq 1 ]; then
+    apt-cache show "$paquete" > /dev/null 2>&1
+
+    if [ "$?" -eq 0 ]; then
+        echo "No está instalado"
+        read -p "¿Quieres instalarlo? (s/n)" pregunta
+        case "$pregunta" in
+            [sS]) sudo apt-get install "$paquete" ;;
+            [nN]) echo "Ok"
+                  exit 0 ;;
+            *) echo "Respuesta no válida" ;;
+        esac
+    elif [ "$?" -eq 100 ]; then
+        echo "No existe"
+        echo "El resultado de la búsqueda es: "
+        apt-cache search "$paquete"
+    fi
+fi
+
+
+
+
+
+
 
 paquete=$1
 
