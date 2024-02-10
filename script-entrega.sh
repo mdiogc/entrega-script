@@ -6,6 +6,68 @@ while [ -z "$paquete" ]; do
 done
 
 echo "Espera un momento mientras se actualizan los repositorios: "
+sudo apt-get update > /dev/null 2>&1
+echo "Los repositorios se han actualizado."
+echo ""
+
+if dpkg -s $paquete > /dev/null 2>&1; then
+    echo "Tiene ese paquete instalado. Elija una opción que se muestra a continuación: "
+    echo ""
+    echo "                *********************"
+    echo "                *******Menú**********"
+    echo "                *********************"
+    echo ""
+    echo "┌───────────────────────────────────────────────────────────┐"
+    echo ""
+    echo "1) Mostrar Versión"
+    echo "2) Reinstalar"
+    echo "3) Actualizarlo"
+    echo "4) Eliminarlo (guardando la configuración)"
+    echo "5) Eliminarlo totalmente"
+    echo ""
+    echo "└───────────────────────────────────────────────────────────┘"
+    read -p "Elija la opción que desee: " opcion
+
+    case "$opcion" in
+        1) dpkg -s $paquete ;;
+        2) sudo apt-get reinstall $paquete ;;
+        3) sudo apt-get install $paquete ;;
+        4) sudo apt-get remove $paquete ;;
+        5) sudo apt-get purge $paquete ;;
+        *) echo "Error: '$opcion' no es una opción correcta" ;;
+    esac
+else
+    echo "No tiene ese paquete instalado."
+    echo "La información sobre ese paquete es la siguiente: "
+    
+    # Hacer la búsqueda y verificar si se encontraron resultados
+    if apt-cache show "$paquete" > /dev/null 2>&1; then
+        apt-cache policy $paquete
+        read -p "¿Quiere instalar este programa? (S/N)" preguntainstalar
+        case $preguntainstalar in
+            "S") sudo apt-get install $paquete ;;
+            "N") echo "De acuerdo"
+                exit 0
+                ;;
+        esac
+    else
+        echo "No está disponible o no existe ese paquete"
+        echo "El resultado de la búsqueda es el siguiente: "
+        echo ""
+        apt-cache search $paquete
+    fi
+fi
+
+
+
+paquete=$1
+
+while [ -z "$paquete" ]; do
+    echo "ERROR: No ha escrito un argumento"
+    read -p "Escribe el nombre del paquete: " paquete
+done
+
+echo "Espera un momento mientras se actualizan los repositorios: "
 
 sudo apt-get update > /dev/null 2>&1
 
