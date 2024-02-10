@@ -48,13 +48,16 @@ while [ -z "$paquete" ]; do
     read -p "Escribe el nombre del paquete: " paquete
 done
 
-sudo apt update
+sudo apt update > /dev/null 2>&1
+
+echo "Los repositorios se han actualizado."
 
 dpkg -s $paquete > /dev/null 2>&1
 if [ "$?" -eq 1 ]; then
-    apt-cache search $paquete > /dev/null
+    apt-cache search $paquete
     if [ $? -eq 0 ]; then
         apt-cache policy $paquete
+        read -p "Escriba de nuevo el nombre exacto del paquete " paquete
         read -p "¿Quiere instalar este programa? (S/N)" preguntainstalar
         case $preguntainstalar in
         "S") sudo apt-get install $paquete ;;
@@ -82,9 +85,9 @@ else
     read -p "Elija la opción que desee: " opcion
 
     case "$opcion" in
-    1) dpkg -s $paquete | grep 'Version:' | cut -d ' ' -f 2 ;;
-    2) sudo apt-get install --reinstall $paquete ;;
-    3) sudo apt-get install --only-upgrade $paquete ;;
+    1) dpkg -s $paquete ;;
+    2) sudo apt-get reinstall $paquete ;;
+    3) sudo apt-get upgrade $paquete ;;
     4) sudo apt-get remove $paquete ;;
     5) sudo apt-get purge $paquete ;;
     *) echo "Error: '$opcion' no es una opción correcta" ;;
